@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konverter Satuan Lengkap</title>
+    <meta name="description" content="Aplikasi konverter satuan lengkap untuk mengkonversi berbagai jenis satuan">
+    <meta name="theme-color" content="#4361ee">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📐</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📐</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .pwa-install-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pwa-install-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .content {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .converter-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .section-title i {
+            font-size: 1.2rem;
+        }
+
+        .select-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .select-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            z-index: 1;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            background-color: white;
+            font-size: 1rem;
+            appearance: none;
+            transition: var(--transition);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-field {
+            position: relative;
+            flex: 1;
+        }
+
+        .input-field i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, var(--primary-dark), var(--secondary));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: none;
+            animation: fadeIn 0.5s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .converter-group {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .converter-group.active {
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            border-top: 1px solid #e9ecef;
+        }
+
+        .offline-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--danger);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            display: none;
+        }
+
+        .offline-indicator.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .content {
+                padding: 15px;
+                max-height: 65vh;
+            }
+            
+            .input-row {
+                flex-direction: column;
+            }
+            
+            .result {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+        }
+
+        @media (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+            
+            .pwa-install-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <button class="pwa-install-btn" id="installButton" title="Install App">
+                <i class="fas fa-download"></i>
+            </button>
+            <h1><i class="fas fa-exchange-alt"></i> Konverter Satuan</h1>
+            <p>Konversi berbagai satuan dengan mudah</p>
+        </div>
+
+        <div class="content">
+            <div class="converter-section">
+                <div class="section-title">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Pilih Kategori Konverter</span>
+                </div>
+                <div class="select-wrapper">
+                    <i class="fas fa-cube"></i>
+                    <select id="category" onchange="showConverter()">
+                        <option value="length">Panjang</option>
+                        <option value="weight">Berat & Massa</option>
+                        <option value="temperature">Suhu</option>
+                        <option value="area">Area</option>
+                        <option value="volume">Volume</option>
+                        <option value="time">Waktu</option>
+                        <option value="energy">Energi</option>
+                        <option value="speed">Kecepatan</option>
+                        <option value="force">Gaya</option>
+                        <option value="data">Penyimpanan Data</option>
+                        <option value="pressure">Tekanan</option>
+                        <option value="power">Daya</option>
+                        <option value="angle">Sudut</option>
+                        <option value="numbers">Angka</option>
+                        <option value="currency">Mata Uang</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Konverter Panjang -->
+            <div id="length-converter" class="converter-group active">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-ruler"></i>
+                        <input type="number" id="length-input" placeholder="Masukkan nilai panjang">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-length-unit">
+                                <option value="meter">Meter (m)</option>
+                                <option value="kilometer">Kilometer (km)</option>
+                                <option value="centimeter">Sentimeter (cm)</option>
+                                <option value="millimeter">Milimeter (mm)</option>
+                                <option value="mile">Mil (mi)</option>
+                                <option value="yard">Yard (yd)</option>
+                                <option value="foot">Kaki (ft)</option>
+                                <option value="inch">Inci (in)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-length-unit">
+                                <option value="meter">Meter (m)</option>
+                                <option value="kilometer">Kilometer (km)</option>
+                                <option value="centimeter">Sentimeter (cm)</option>
+                                <option value="millimeter">Milimeter (mm)</option>
+                                <option value="mile">Mil (mi)</option>
+                                <option value="yard">Yard (yd)</option>
+                                <option value="foot">Kaki (ft)</option>
+                                <option value="inch">Inci (in)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertLength()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="length-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Berat -->
+            <div id="weight-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-weight-hanging"></i>
+                        <input type="number" id="weight-input" placeholder="Masukkan nilai berat">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-weight-unit">
+                                <option value="kilogram">Kilogram (kg)</option>
+                                <option value="gram">Gram (g)</option>
+                                <option value="milligram">Miligram (mg)</option>
+                                <option value="pound">Pound (lb)</option>
+                                <option value="ounce">Ons (oz)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-weight-unit">
+                                <option value="kilogram">Kilogram (kg)</option>
+                                <option value="gram">Gram (g)</option>
+                                <option value="milligram">Miligram (mg)</option>
+                                <option value="pound">Pound (lb)</option>
+                                <option value="ounce">Ons (oz)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertWeight()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="weight-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Suhu -->
+            <div id="temperature-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-thermometer-half"></i>
+                        <input type="number" id="temperature-input" placeholder="Masukkan nilai suhu">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-temperature-unit">
+                                <option value="celsius">Celsius (°C)</option>
+                                <option value="fahrenheit">Fahrenheit (°F)</option>
+                                <option value="kelvin">Kelvin (K)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-temperature-unit">
+                                <option value="celsius">Celsius (°C)</option>
+                                <option value="fahrenheit">Fahrenheit (°F)</option>
+                                <option value="kelvin">Kelvin (K)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertTemperature()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="temperature-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Area -->
+            <div id="area-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-border-all"></i>
+                        <input type="number" id="area-input" placeholder="Masukkan nilai area">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-area-unit">
+                                <option value="sq_meter">Meter Persegi (m²)</option>
+                                <option value="sq_kilometer">Kilometer Persegi (km²)</option>
+                                <option value="sq_centimeter">Sentimeter Persegi (cm²)</option>
+                                <option value="hectare">Hektar (ha)</option>
+                                <option value="acre">Acre (ac)</option>
+                                <option value="sq_mile">Mil Persegi (mi²)</option>
+                                <option value="sq_yard">Yard Persegi (yd²)</option>
+                                <option value="sq_foot">Kaki Persegi (ft²)</option>
+                                <option value="sq_inch">Inci Persegi (in²)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-area-unit">
+                                <option value="sq_meter">Meter Persegi (m²)</option>
+                                <option value="sq_kilometer">Kilometer Persegi (km²)</option>
+                                <option value="sq_centimeter">Sentimeter Persegi (cm²)</option>
+                                <option value="hectare">Hektar (ha)</option>
+                                <option value="acre">Acre (ac)</option>
+                                <option value="sq_mile">Mil Persegi (mi²)</option>
+                                <option value="sq_yard">Yard Persegi (yd²)</option>
+                                <option value="sq_foot">Kaki Persegi (ft²)</option>
+                                <option value="sq_inch">Inci Persegi (in²)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertArea()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="area-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Volume -->
+            <div id="volume-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-cube"></i>
+                        <input type="number" id="volume-input" placeholder="Masukkan nilai volume">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-volume-unit">
+                                <option value="cubic_meter">Meter Kubik (m³)</option>
+                                <option value="liter">Liter (L)</option>
+                                <option value="milliliter">Mililiter (mL)</option>
+                                <option value="gallon">Galon (gal)</option>
+                                <option value="quart">Quart (qt)</option>
+                                <option value="pint">Pint (pt)</option>
+                                <option value="cup">Cup</option>
+                                <option value="fluid_ounce">Fluid Ounce (fl oz)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-volume-unit">
+                                <option value="cubic_meter">Meter Kubik (m³)</option>
+                                <option value="liter">Liter (L)</option>
+                                <option value="milliliter">Mililiter (mL)</option>
+                                <option value="gallon">Galon (gal)</option>
+                                <option value="quart">Quart (qt)</option>
+                                <option value="pint">Pint (pt)</option>
+                                <option value="cup">Cup</option>
+                                <option value="fluid_ounce">Fluid Ounce (fl oz)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertVolume()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="volume-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Waktu -->
+            <div id="time-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-clock"></i>
+                        <input type="number" id="time-input" placeholder="Masukkan nilai waktu">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-time-unit">
+                                <option value="second">Detik (s)</option>
+                                <option value="minute">Menit (min)</option>
+                                <option value="hour">Jam (h)</option>
+                                <option value="day">Hari (day)</option>
+                                <option value="week">Minggu (week)</option>
+                                <option value="month">Bulan (month)</option>
+                                <option value="year">Tahun (year)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-time-unit">
+                                <option value="second">Detik (s)</option>
+                                <option value="minute">Menit (min)</option>
+                                <option value="hour">Jam (h)</option>
+                                <option value="day">Hari (day)</option>
+                                <option value="week">Minggu (week)</option>
+                                <option value="month">Bulan (month)</option>
+                                <option value="year">Tahun (year)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertTime()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="time-result" class="result"></div>
+            </div>
+
+            <!-- Tambahkan konverter lainnya di sini -->
+            <!-- Konverter Energi -->
+            <div id="energy-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-bolt"></i>
+                        <input type="number" id="energy-input" placeholder="Masukkan nilai energi">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-energy-unit">
+                                <option value="joule">Joule (J)</option>
+                                <option value="kilojoule">Kilojoule (kJ)</option>
+                                <option value="calorie">Kalori (cal)</option>
+                                <option value="kilocalorie">Kilokalori (kcal)</option>
+                                <option value="watt_hour">Watt-hour (Wh)</option>
+                                <option value="kilowatt_hour">Kilowatt-hour (kWh)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-energy-unit">
+                                <option value="joule">Joule (J)</option>
+                                <option value="kilojoule">Kilojoule (kJ)</option>
+                                <option value="calorie">Kalori (cal)</option>
+                                <option value="kilocalorie">Kilokalori (kcal)</option>
+                                <option value="watt_hour">Watt-hour (Wh)</option>
+                                <option value="kilowatt_hour">Kilowatt-hour (kWh)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertEnergy()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="energy-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Kecepatan -->
+            <div id="speed-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <input type="number" id="speed-input" placeholder="Masukkan nilai kecepatan">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-speed-unit">
+                                <option value="meter_second">Meter/detik (m/s)</option>
+                                <option value="kilometer_hour">Kilometer/jam (km/h)</option>
+                                <option value="mile_hour">Mil/jam (mph)</option>
+                                <option value="knot">Knot (kn)</option>
+                                <option value="foot_second">Kaki/detik (ft/s)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-speed-unit">
+                                <option value="meter_second">Meter/detik (m/s)</option>
+                                <option value="kilometer_hour">Kilometer/jam (km/h)</option>
+                                <option value="mile_hour">Mil/jam (mph)</option>
+                                <option value="knot">Knot (kn)</option>
+                                <option value="foot_second">Kaki/detik (ft/s)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertSpeed()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="speed-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Gaya -->
+            <div id="force-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-weight"></i>
+                        <input type="number" id="force-input" placeholder="Masukkan nilai gaya">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-force-unit">
+                                <option value="newton">Newton (N)</option>
+                                <option value="kilonewton">Kilonewton (kN)</option>
+                                <option value="dyne">Dyne (dyn)</option>
+                                <option value="pound_force">Pound-force (lbf)</option>
+                                <option value="kilogram_force">Kilogram-force (kgf)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-force-unit">
+                                <option value="newton">Newton (N)</option>
+                                <option value="kilonewton">Kilonewton (kN)</option>
+                                <option value="dyne">Dyne (dyn)</option>
+                                <option value="pound_force">Pound-force (lbf)</option>
+                                <option value="kilogram_force">Kilogram-force (kgf)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertForce()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="force-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Penyimpanan Data -->
+            <div id="data-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-database"></i>
+                        <input type="number" id="data-input" placeholder="Masukkan nilai data">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-data-unit">
+                                <option value="bit">Bit (b)</option>
+                                <option value="byte">Byte (B)</option>
+                                <option value="kilobyte">Kilobyte (KB)</option>
+                                <option value="megabyte">Megabyte (MB)</option>
+                                <option value="gigabyte">Gigabyte (GB)</option>
+                                <option value="terabyte">Terabyte (TB)</option>
+                                <option value="petabyte">Petabyte (PB)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-data-unit">
+                                <option value="bit">Bit (b)</option>
+                                <option value="byte">Byte (B)</option>
+                                <option value="kilobyte">Kilobyte (KB)</option>
+                                <option value="megabyte">Megabyte (MB)</option>
+                                <option value="gigabyte">Gigabyte (GB)</option>
+                                <option value="terabyte">Terabyte (TB)</option>
+                                <option value="petabyte">Petabyte (PB)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertData()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="data-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Tekanan -->
+            <div id="pressure-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <input type="number" id="pressure-input" placeholder="Masukkan nilai tekanan">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-pressure-unit">
+                                <option value="pascal">Pascal (Pa)</option>
+                                <option value="kilopascal">Kilopascal (kPa)</option>
+                                <option value="bar">Bar (bar)</option>
+                                <option value="psi">Pound per square inch (psi)</option>
+                                <option value="atm">Atmosfer (atm)</option>
+                                <option value="torr">Torr (torr)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-pressure-unit">
+                                <option value="pascal">Pascal (Pa)</option>
+                                <option value="kilopascal">Kilopascal (kPa)</option>
+                                <option value="bar">Bar (bar)</option>
+                                <option value="psi">Pound per square inch (psi)</option>
+                                <option value="atm">Atmosfer (atm)</option>
+                                <option value="torr">Torr (torr)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertPressure()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="pressure-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Daya -->
+            <div id="power-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-bolt"></i>
+                        <input type="number" id="power-input" placeholder="Masukkan nilai daya">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-power-unit">
+                                <option value="watt">Watt (W)</option>
+                                <option value="kilowatt">Kilowatt (kW)</option>
+                                <option value="horsepower">Horsepower (hp)</option>
+                                <option value="megawatt">Megawatt (MW)</option>
+                                <option value="btu_hour">BTU/hour (BTU/h)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-power-unit">
+                                <option value="watt">Watt (W)</option>
+                                <option value="kilowatt">Kilowatt (kW)</option>
+                                <option value="horsepower">Horsepower (hp)</option>
+                                <option value="megawatt">Megawatt (MW)</option>
+                                <option value="btu_hour">BTU/hour (BTU/h)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertPower()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="power-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Sudut -->
+            <div id="angle-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-circle"></i>
+                        <input type="number" id="angle-input" placeholder="Masukkan nilai sudut">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-angle-unit">
+                                <option value="degree">Derajat (°)</option>
+                                <option value="radian">Radian (rad)</option>
+                                <option value="gradian">Gradian (grad)</option>
+                                <option value="arcminute">Menit busur (arcmin)</option>
+                                <option value="arcsecond">Detik busur (arcsec)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-angle-unit">
+                                <option value="degree">Derajat (°)</option>
+                                <option value="radian">Radian (rad)</option>
+                                <option value="gradian">Gradian (grad)</option>
+                                <option value="arcminute">Menit busur (arcmin)</option>
+                                <option value="arcsecond">Detik busur (arcsec)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertAngle()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="angle-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Angka -->
+            <div id="numbers-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-sort-numeric-up"></i>
+                        <input type="text" id="numbers-input" placeholder="Masukkan nilai angka">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-numbers-unit">
+                                <option value="decimal">Desimal</option>
+                                <option value="binary">Biner</option>
+                                <option value="octal">Oktal</option>
+                                <option value="hexadecimal">Heksadesimal</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-numbers-unit">
+                                <option value="decimal">Desimal</option>
+                                <option value="binary">Biner</option>
+                                <option value="octal">Oktal</option>
+                                <option value="hexadecimal">Heksadesimal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertNumbers()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="numbers-result" class="result"></div>
+            </div>
+
+            <!-- Konverter Mata Uang -->
+            <div id="currency-converter" class="converter-group">
+                <div class="input-group">
+                    <div class="input-field">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <input type="number" id="currency-input" placeholder="Masukkan nilai mata uang">
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-down"></i>
+                            <select id="from-currency-unit">
+                                <option value="IDR">Rupiah Indonesia (IDR)</option>
+                                <option value="USD">Dolar Amerika (USD)</option>
+                                <option value="EUR">Euro (EUR)</option>
+                                <option value="GBP">Pound Sterling (GBP)</option>
+                                <option value="JPY">Yen Jepang (JPY)</option>
+                                <option value="SGD">Dolar Singapura (SGD)</option>
+                                <option value="MYR">Ringgit Malaysia (MYR)</option>
+                                <option value="CNY">Yuan China (CNY)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-wrapper">
+                            <i class="fas fa-arrow-up"></i>
+                            <select id="to-currency-unit">
+                                <option value="IDR">Rupiah Indonesia (IDR)</option>
+                                <option value="USD">Dolar Amerika (USD)</option>
+                                <option value="EUR">Euro (EUR)</option>
+                                <option value="GBP">Pound Sterling (GBP)</option>
+                                <option value="JPY">Yen Jepang (JPY)</option>
+                                <option value="SGD">Dolar Singapura (SGD)</option>
+                                <option value="MYR">Ringgit Malaysia (MYR)</option>
+                                <option value="CNY">Yuan China (CNY)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="convertCurrency()">
+                    <i class="fas fa-sync-alt"></i> Konversi
+                </button>
+                
+                <div id="currency-result" class="result"></div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>Konverter Satuan Lengkap &copy; 2023 - PWA</p>
+        </div>
+    </div>
+
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi"></i> Anda sedang offline
+    </div>
+
+    <script>
+        // PWA Features
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+        const offlineIndicator = document.getElementById('offlineIndicator');
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'flex';
+            
+            installButton.addEventListener('click', () => {
+                installButton.style.display = 'none';
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                    } else {
+                        console.log('User dismissed install');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
+
+        // Online/Offline detection
+        window.addEventListener('online', () => {
+            offlineIndicator.classList.remove('show');
+        });
+
+        window.addEventListener('offline', () => {
+            offlineIndicator.classList.add('show');
+        });
+
+        // Check initial connection status
+        if (!navigator.onLine) {
+            offlineIndicator.classList.add('show');
+        }
+
+        // Konverter functions (sama seperti sebelumnya)
+        function showConverter() {
+            const category = document.getElementById('category').value;
+            const converters = document.querySelectorAll('.converter-group');
+            
+            converters.forEach(converter => {
+                if (converter.id === `${category}-converter`) {
+                    converter.classList.add('active');
+                } else {
+                    converter.classList.remove('active');
+                }
+            });
+            
+            // Reset semua hasil
+            const results = document.querySelectorAll('.result');
+            results.forEach(result => {
+                result.classList.remove('show');
+            });
+        }
+
+        // Konversi Panjang
+        function convertLength() {
+            const inputValue = parseFloat(document.getElementById('length-input').value);
+            const fromUnit = document.getElementById('from-length-unit').value;
+            const toUnit = document.getElementById('to-length-unit').value;
+            const resultElement = document.getElementById('length-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke meter
+            const toMeters = {
+                meter: 1,
+                kilometer: 1000,
+                centimeter: 0.01,
+                millimeter: 0.001,
+                mile: 1609.34,
+                yard: 0.9144,
+                foot: 0.3048,
+                inch: 0.0254
+            };
+
+            const valueInMeters = inputValue * toMeters[fromUnit];
+            const convertedValue = valueInMeters / toMeters[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Berat
+        function convertWeight() {
+            const inputValue = parseFloat(document.getElementById('weight-input').value);
+            const fromUnit = document.getElementById('from-weight-unit').value;
+            const toUnit = document.getElementById('to-weight-unit').value;
+            const resultElement = document.getElementById('weight-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke kilogram
+            const toKilograms = {
+                kilogram: 1,
+                gram: 0.001,
+                milligram: 0.000001,
+                pound: 0.453592,
+                ounce: 0.0283495
+            };
+
+            const valueInKilograms = inputValue * toKilograms[fromUnit];
+            const convertedValue = valueInKilograms / toKilograms[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Suhu
+        function convertTemperature() {
+            const inputValue = parseFloat(document.getElementById('temperature-input').value);
+            const fromUnit = document.getElementById('from-temperature-unit').value;
+            const toUnit = document.getElementById('to-temperature-unit').value;
+            const resultElement = document.getElementById('temperature-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            let convertedValue;
+
+            if (fromUnit === toUnit) {
+                convertedValue = inputValue;
+            } else if (fromUnit === 'celsius') {
+                if (toUnit === 'fahrenheit') {
+                    convertedValue = (inputValue * 9/5) + 32;
+                } else if (toUnit === 'kelvin') {
+                    convertedValue = inputValue + 273.15;
+                }
+            } else if (fromUnit === 'fahrenheit') {
+                if (toUnit === 'celsius') {
+                    convertedValue = (inputValue - 32) * 5/9;
+                } else if (toUnit === 'kelvin') {
+                    convertedValue = (inputValue - 32) * 5/9 + 273.15;
+                }
+            } else if (fromUnit === 'kelvin') {
+                if (toUnit === 'celsius') {
+                    convertedValue = inputValue - 273.15;
+                } else if (toUnit === 'fahrenheit') {
+                    convertedValue = (inputValue - 273.15) * 9/5 + 32;
+                }
+            }
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(2)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Area
+        function convertArea() {
+            const inputValue = parseFloat(document.getElementById('area-input').value);
+            const fromUnit = document.getElementById('from-area-unit').value;
+            const toUnit = document.getElementById('to-area-unit').value;
+            const resultElement = document.getElementById('area-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke meter persegi
+            const toSqMeters = {
+                sq_meter: 1,
+                sq_kilometer: 1000000,
+                sq_centimeter: 0.0001,
+                hectare: 10000,
+                acre: 4046.86,
+                sq_mile: 2589988.11,
+                sq_yard: 0.836127,
+                sq_foot: 0.092903,
+                sq_inch: 0.00064516
+            };
+
+            const valueInSqMeters = inputValue * toSqMeters[fromUnit];
+            const convertedValue = valueInSqMeters / toSqMeters[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Volume
+        function convertVolume() {
+            const inputValue = parseFloat(document.getElementById('volume-input').value);
+            const fromUnit = document.getElementById('from-volume-unit').value;
+            const toUnit = document.getElementById('to-volume-unit').value;
+            const resultElement = document.getElementById('volume-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke liter
+            const toLiters = {
+                cubic_meter: 1000,
+                liter: 1,
+                milliliter: 0.001,
+                gallon: 3.78541,
+                quart: 0.946353,
+                pint: 0.473176,
+                cup: 0.24,
+                fluid_ounce: 0.0295735
+            };
+
+            const valueInLiters = inputValue * toLiters[fromUnit];
+            const convertedValue = valueInLiters / toLiters[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Waktu
+        function convertTime() {
+            const inputValue = parseFloat(document.getElementById('time-input').value);
+            const fromUnit = document.getElementById('from-time-unit').value;
+            const toUnit = document.getElementById('to-time-unit').value;
+            const resultElement = document.getElementById('time-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke detik
+            const toSeconds = {
+                second: 1,
+                minute: 60,
+                hour: 3600,
+                day: 86400,
+                week: 604800,
+                month: 2592000, // 30 hari
+                year: 31536000 // 365 hari
+            };
+
+            const valueInSeconds = inputValue * toSeconds[fromUnit];
+            const convertedValue = valueInSeconds / toSeconds[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Energi
+        function convertEnergy() {
+            const inputValue = parseFloat(document.getElementById('energy-input').value);
+            const fromUnit = document.getElementById('from-energy-unit').value;
+            const toUnit = document.getElementById('to-energy-unit').value;
+            const resultElement = document.getElementById('energy-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke joule
+            const toJoules = {
+                joule: 1,
+                kilojoule: 1000,
+                calorie: 4.184,
+                kilocalorie: 4184,
+                watt_hour: 3600,
+                kilowatt_hour: 3600000
+            };
+
+            const valueInJoules = inputValue * toJoules[fromUnit];
+            const convertedValue = valueInJoules / toJoules[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Kecepatan
+        function convertSpeed() {
+            const inputValue = parseFloat(document.getElementById('speed-input').value);
+            const fromUnit = document.getElementById('from-speed-unit').value;
+            const toUnit = document.getElementById('to-speed-unit').value;
+            const resultElement = document.getElementById('speed-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke m/s
+            const toMeterPerSecond = {
+                meter_second: 1,
+                kilometer_hour: 0.277778,
+                mile_hour: 0.44704,
+                knot: 0.514444,
+                foot_second: 0.3048
+            };
+
+            const valueInMeterPerSecond = inputValue * toMeterPerSecond[fromUnit];
+            const convertedValue = valueInMeterPerSecond / toMeterPerSecond[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Gaya
+        function convertForce() {
+            const inputValue = parseFloat(document.getElementById('force-input').value);
+            const fromUnit = document.getElementById('from-force-unit').value;
+            const toUnit = document.getElementById('to-force-unit').value;
+            const resultElement = document.getElementById('force-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke newton
+            const toNewtons = {
+                newton: 1,
+                kilonewton: 1000,
+                dyne: 0.00001,
+                pound_force: 4.44822,
+                kilogram_force: 9.80665
+            };
+
+            const valueInNewtons = inputValue * toNewtons[fromUnit];
+            const convertedValue = valueInNewtons / toNewtons[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Penyimpanan Data
+        function convertData() {
+            const inputValue = parseFloat(document.getElementById('data-input').value);
+            const fromUnit = document.getElementById('from-data-unit').value;
+            const toUnit = document.getElementById('to-data-unit').value;
+            const resultElement = document.getElementById('data-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke byte
+            const toBytes = {
+                bit: 0.125,
+                byte: 1,
+                kilobyte: 1024,
+                megabyte: 1048576,
+                gigabyte: 1073741824,
+                terabyte: 1099511627776,
+                petabyte: 1125899906842624
+            };
+
+            const valueInBytes = inputValue * toBytes[fromUnit];
+            const convertedValue = valueInBytes / toBytes[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Tekanan
+        function convertPressure() {
+            const inputValue = parseFloat(document.getElementById('pressure-input').value);
+            const fromUnit = document.getElementById('from-pressure-unit').value;
+            const toUnit = document.getElementById('to-pressure-unit').value;
+            const resultElement = document.getElementById('pressure-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke pascal
+            const toPascals = {
+                pascal: 1,
+                kilopascal: 1000,
+                bar: 100000,
+                psi: 6894.76,
+                atm: 101325,
+                torr: 133.322
+            };
+
+            const valueInPascals = inputValue * toPascals[fromUnit];
+            const convertedValue = valueInPascals / toPascals[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Daya
+        function convertPower() {
+            const inputValue = parseFloat(document.getElementById('power-input').value);
+            const fromUnit = document.getElementById('from-power-unit').value;
+            const toUnit = document.getElementById('to-power-unit').value;
+            const resultElement = document.getElementById('power-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke watt
+            const toWatts = {
+                watt: 1,
+                kilowatt: 1000,
+                horsepower: 745.7,
+                megawatt: 1000000,
+                btu_hour: 0.293071
+            };
+
+            const valueInWatts = inputValue * toWatts[fromUnit];
+            const convertedValue = valueInWatts / toWatts[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Sudut
+        function convertAngle() {
+            const inputValue = parseFloat(document.getElementById('angle-input').value);
+            const fromUnit = document.getElementById('from-angle-unit').value;
+            const toUnit = document.getElementById('to-angle-unit').value;
+            const resultElement = document.getElementById('angle-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Faktor konversi ke derajat
+            const toDegrees = {
+                degree: 1,
+                radian: 57.2958,
+                gradian: 0.9,
+                arcminute: 1/60,
+                arcsecond: 1/3600
+            };
+
+            const valueInDegrees = inputValue * toDegrees[fromUnit];
+            const convertedValue = valueInDegrees / toDegrees[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(6)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Angka
+        function convertNumbers() {
+            const inputValue = document.getElementById('numbers-input').value;
+            const fromUnit = document.getElementById('from-numbers-unit').value;
+            const toUnit = document.getElementById('to-numbers-unit').value;
+            const resultElement = document.getElementById('numbers-result');
+
+            if (!inputValue) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            let decimalValue;
+
+            // Konversi ke desimal
+            if (fromUnit === 'decimal') {
+                decimalValue = parseInt(inputValue, 10);
+            } else if (fromUnit === 'binary') {
+                decimalValue = parseInt(inputValue, 2);
+            } else if (fromUnit === 'octal') {
+                decimalValue = parseInt(inputValue, 8);
+            } else if (fromUnit === 'hexadecimal') {
+                decimalValue = parseInt(inputValue, 16);
+            }
+
+            if (isNaN(decimalValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Konversi dari desimal ke sistem yang diinginkan
+            let convertedValue;
+            if (toUnit === 'decimal') {
+                convertedValue = decimalValue.toString(10);
+            } else if (toUnit === 'binary') {
+                convertedValue = decimalValue.toString(2);
+            } else if (toUnit === 'octal') {
+                convertedValue = decimalValue.toString(8);
+            } else if (toUnit === 'hexadecimal') {
+                convertedValue = decimalValue.toString(16).toUpperCase();
+            }
+
+            resultElement.innerText = `${inputValue} (${fromUnit}) = ${convertedValue} (${toUnit})`;
+            resultElement.classList.add('show');
+        }
+
+        // Konversi Mata Uang
+        function convertCurrency() {
+            const inputValue = parseFloat(document.getElementById('currency-input').value);
+            const fromUnit = document.getElementById('from-currency-unit').value;
+            const toUnit = document.getElementById('to-currency-unit').value;
+            const resultElement = document.getElementById('currency-result');
+
+            if (isNaN(inputValue)) {
+                resultElement.innerText = "Masukkan nilai yang valid.";
+                resultElement.classList.add('show');
+                return;
+            }
+
+            // Nilai tukar (contoh, dalam aplikasi nyata gunakan API)
+            const exchangeRates = {
+                IDR: 1,
+                USD: 0.000064,
+                EUR: 0.000059,
+                GBP: 0.000051,
+                JPY: 0.0094,
+                SGD: 0.000086,
+                MYR: 0.00030,
+                CNY: 0.00046
+            };
+
+            // Konversi ke IDR terlebih dahulu
+            const valueInIDR = inputValue / exchangeRates[fromUnit];
+            const convertedValue = valueInIDR * exchangeRates[toUnit];
+
+            resultElement.innerText = `${inputValue} ${fromUnit} = ${convertedValue.toFixed(2)} ${toUnit}`;
+            resultElement.classList.add('show');
+        }
+
+        // Tampilkan konverter default saat halaman dimuat
+        showConverter();
+    </script>
+
+    <script>
+        // Inline Service Worker untuk PWA
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'unit-converter-v1';
+                const urlsToCache = [
+                    '/',
+                    '/index.html',
+                    '/styles.css',
+                    '/app.js',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+                ];
+
+                self.addEventListener('install', (event) => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then((cache) => {
+                                return cache.addAll(urlsToCache);
+                            })
+                    );
+                });
+
+                self.addEventListener('fetch', (event) => {
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then((response) => {
+                                if (response) {
+                                    return response;
+                                }
+                                return fetch(event.request);
+                            }
+                        )
+                    );
+                });
+            `;
+
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            
+            navigator.serviceWorker.register(swUrl)
+                .then((registration) => {
+                    console.log('SW registered: ', registration);
+                })
+                .catch((registrationError) => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+        }
+    </script>
+
+</body>
+</html>
