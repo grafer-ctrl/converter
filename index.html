@@ -428,20 +428,21 @@
     </div>
 
     <!-- Bottom Nav -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="window.scrollTo(0,0)">
+   <nav class="bottom-nav">
+        <a href="#" class="nav-item active">
             <i class="fas fa-calculator"></i>
-            <span data-i18n="nav_calc">Calc</span>
-        </button>
-        <button class="nav-item" onclick="alert('Coming soon!')">
-            <i class="fas fa-history"></i>
-            <span data-i18n="nav_history">History</span>
-        </button>
-        <button class="nav-item" onclick="location.reload()">
+            <span>Calc</span>
+        </a>
+        <a href="game.html" class="nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span>Game</span>
+        </a>
+        <a href="javascript:location.reload()" class="nav-item">
             <i class="fas fa-sync-alt"></i>
-            <span data-i18n="nav_reset">Reset</span>
-        </button>
+            <span>Reset</span>
+        </a>
     </nav>
+
 
     <!-- LOGIC & TRANSLATION -->
     <script>
