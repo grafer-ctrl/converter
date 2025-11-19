@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Brain Convert - Game</title>
+    <meta name="theme-color" content="#0f172a">
+    
+    <!-- Menggunakan CSS yang sama agar tampilan menyatu -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Copy Style Dasar dari Index.html */
+        :root {
+            --bg-dark: #0f172a; --bg-panel: rgba(30, 41, 59, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #f97316; --secondary: #ec4899;
+            --text-main: #f8fafc; --text-muted: #94a3b8;
+            --radius-lg: 24px; --radius-md: 16px;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            --danger: #ef4444; --success: #22c55e;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; padding-bottom: 100px; overflow-x: hidden; }
+        
+        .orb { position: fixed; border-radius: 50%; filter: blur(90px); z-index: -1; opacity: 0.5; }
+        .orb-1 { top: -60px; left: -60px; width: 300px; height: 300px; background: var(--primary); }
+        .orb-2 { bottom: 100px; right: -60px; width: 250px; height: 250px; background: var(--secondary); }
+        
+        .app-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .glass-card { background: var(--bg-panel); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 25px; box-shadow: var(--shadow); margin-bottom: 20px; }
+
+        /* --- GAME SPECIFIC CSS --- */
+        .game-header { text-align: center; margin-bottom: 20px; }
+        .score-board { display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 50px; margin-bottom: 20px; border: 1px solid var(--glass-border); }
+        .game-stat { font-size: 0.9rem; color: var(--text-muted); }
+        .game-stat span { font-weight: bold; color: white; font-size: 1.1rem; }
+        
+        .question-card { text-align: center; padding: 30px 10px; }
+        .question-text { font-size: 1.6rem; font-weight: 700; margin-bottom: 25px; line-height: 1.4; }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-game-option { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 15px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+        .btn-game-option:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+        
+        .btn-start { background: linear-gradient(to right, var(--secondary), #db2777); width: 100%; padding: 15px; border: none; border-radius: var(--radius-md); color: white; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4); }
+
+        .feedback-anim { animation: pulse 0.3s; }
+        @keyframes pulse { 0%{transform:scale(1);} 50%{transform:scale(1.05);} 100%{transform:scale(1);} }
+        
+        .ad-container { margin-top: 30px; margin-bottom: 80px; text-align: center; border-radius: var(--radius-md); overflow: hidden; }
+
+        /* BOTTOM NAV */
+        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 30px; display: flex; justify-content: space-around; padding: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); z-index: 1000; }
+        .nav-item { color: var(--text-muted); text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; gap: 4px; transition: 0.3s; }
+        .nav-item i { font-size: 1.2rem; }
+        .nav-item.active { color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="app-container">
+        <div class="game-header glass-card">
+            <h2 style="font-size: 1.5rem; margin-bottom:5px; color:var(--secondary)">Brain Convert 🎮</h2>
+            <p style="font-size:0.9rem; color:var(--text-muted)">Test your conversion skills!</p>
+        </div>
+
+        <!-- GAME CONTAINER -->
+        <div class="glass-card">
+            <!-- Start Screen -->
+            <div id="game-start-screen" style="text-align: center; padding: 20px;">
+                <i class="fas fa-brain" style="font-size: 4rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <p style="margin-bottom: 20px; font-size: 1.1rem;">Answer before time runs out!</p>
+                <div class="score-board" style="justify-content: center; margin-bottom: 20px;">
+                    <div class="game-stat">High Score: <span id="high-score-display">0</span></div>
+                </div>
+                <button class="btn-start" onclick="startGame()">START GAME</button>
+            </div>
+
+            <!-- Gameplay Screen -->
+            <div id="game-play-screen" style="display: none;">
+                <div class="score-board">
+                    <div class="game-stat">Score: <span id="current-score">0</span></div>
+                    <div class="game-stat">Time: <span id="time-left" style="color: var(--primary)">30</span>s</div>
+                </div>
+                <div class="question-card">
+                    <div class="question-text" id="question-text">Loading...</div>
+                    <div class="options-grid" id="options-container"></div>
+                </div>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div id="game-over-screen" style="display: none; text-align: center; padding: 20px;">
+                <i class="fas fa-trophy" style="font-size: 4rem; color: gold; margin-bottom: 20px;"></i>
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Game Over!</h3>
+                <p>Your Score: <span id="final-score" style="font-weight:bold; font-size:1.2rem; color:white">0</span></p>
+                <br>
+                <button class="btn-start" onclick="startGame()">PLAY AGAIN</button>
+            </div>
+        </div>
+
+        <!-- Adsterra Ads -->
+        <div class="ad-container">
+            <script type="text/javascript">
+                atOptions = { 'key' : 'ebfdab5e67bf88fdbf6b899b5deca8bd', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/ebfdab5e67bf88fdbf6b899b5deca8bd/invoke.js"></script>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-calculator"></i>
+            <span>Calc</span>
+        </a>
+        <a href="#" class="nav-item active">
+            <i class="fas fa-gamepad"></i>
+            <span>Game</span>
+        </a>
+        <a href="javascript:location.reload()" class="nav-item">
+            <i class="fas fa-sync-alt"></i>
+            <span>Reset</span>
+        </a>
+    </nav>
+
+    <script>
+        // --- GAME LOGIC ---
+        let score = 0;
+        let timer = 30;
+        let interval;
+        
+        const questions = [
+            { q: "1 km = ... m?", options: ["100", "1000", "10", "10000"], ans: 1 },
+            { q: "1000 g = ... kg?", options: ["10", "100", "1", "0.1"], ans: 2 },
+            { q: "Freezing point (C)?", options: ["100°", "0°", "-10°", "32°"], ans: 1 },
+            { q: "1 Hour = ... Min?", options: ["100", "30", "60", "3600"], ans: 2 },
+            { q: "100 cm = ... m?", options: ["1", "10", "100", "0.1"], ans: 0 },
+            { q: "1 GB = ... MB?", options: ["1000", "1024", "512", "2048"], ans: 1 },
+            { q: "Boiling point (C)?", options: ["100°", "90°", "110°", "212°"], ans: 0 },
+            { q: "1 Min = ... Sec?", options: ["60", "100", "30", "10"], ans: 0 },
+            { q: "1000 mg = ... g?", options: ["1", "10", "0.1", "0.01"], ans: 0 },
+            { q: "1 Foot = ... Inch?", options: ["10", "12", "8", "6"], ans: 1 }
+        ];
+
+        document.getElementById('high-score-display').innerText = localStorage.getItem('brainConvertHighScore') || 0;
+
+        function startGame() {
+            score = 0;
+            timer = 30;
+            document.getElementById('current-score').innerText = score;
+            document.getElementById('time-left').innerText = timer;
+            
+            document.getElementById('game-start-screen').style.display = 'none';
+            document.getElementById('game-over-screen').style.display = 'none';
+            document.getElementById('game-play-screen').style.display = 'block';
+
+            generateQuestion();
+            
+            if(interval) clearInterval(interval);
+            interval = setInterval(() => {
+                timer--;
+                document.getElementById('time-left').innerText = timer;
+                if(timer <= 0) endGame();
+            }, 1000);
+        }
+
+        function generateQuestion() {
+            const rand = Math.floor(Math.random() * questions.length);
+            const q = questions[rand];
+            document.getElementById('question-text').innerText = q.q;
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-game-option';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, q.ans, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct, btn) {
+            if (selected === correct) {
+                score += 10;
+                document.getElementById('current-score').innerText = score;
+                btn.style.background = 'var(--success)';
+                btn.style.borderColor = 'var(--success)';
+                setTimeout(generateQuestion, 300);
+            } else {
+                timer -= 5;
+                btn.style.background = 'var(--danger)';
+                btn.classList.add('feedback-anim');
+                setTimeout(() => { btn.style.background = ''; btn.classList.remove('feedback-anim'); }, 300);
+            }
+        }
+
+        function endGame() {
+            clearInterval(interval);
+            document.getElementById('game-play-screen').style.display = 'none';
+            document.getElementById('game-over-screen').style.display = 'block';
+            document.getElementById('final-score').innerText = score;
+
+            const currentHigh = parseInt(localStorage.getItem('brainConvertHighScore') || 0);
+            if (score > currentHigh) {
+                localStorage.setItem('brainConvertHighScore', score);
+                document.getElementById('high-score-display').innerText = score;
+            }
+        }
+    </script>
+</body>
+</html>
